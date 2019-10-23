@@ -23,11 +23,13 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private BluetoothSPP bt;
+    private Ledger ld;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ld = new Ledger();
         bt = new BluetoothSPP(this); //Initializing
 
         if (!bt.isBluetoothAvailable()) { //블루투스 사용 불가
@@ -72,10 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
     }
 
     public void onDestroy() {
@@ -102,9 +100,11 @@ public class MainActivity extends AppCompatActivity {
         final TextView curTime = findViewById(R.id.dateNow) ;
         String itext = (time.get(Calendar.MONTH) + 1) + "월의 " + time.get(Calendar.WEEK_OF_MONTH) + "번째 주";
         curTime.setText(itext);
+        final TextView canUse = findViewById(R.id.canUse);
+        final TextView used = findViewById(R.id.used);
 
 
-        final EditText editText1 = (EditText) findViewById(R.id.editText1) ;
+        final EditText editText1 = findViewById(R.id.editText1) ;
         Button btnSend = findViewById(R.id.btnSend); //데이터 전송
 
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String strValue = et.getText().toString().trim();
                         int iValue = Integer.parseInt(strValue);
-                        TextView canUse = findViewById(R.id.canUse);
-                        String canUseMoney = "사용할 수 있는 돈은 " + iValue + "만원";
+                        ld.setMoney(iValue);
+                        String canUseMoney = "사용할 수 있는 돈은 " + ld.getMoney() + "만원";
                         canUse.setText(canUseMoney);
 
                         dialog.dismiss();
@@ -147,6 +147,72 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button useMoney = findViewById(R.id.open);
+        useMoney.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (ld.canUseMoney()) {
+                    AlertDialog.Builder op = new AlertDialog.Builder(MainActivity.this);
+                    op.setTitle("문 열림");
+                    op.setMessage("문이 열렸습니다. 가계부를 작성하세요!");
+                    op.setCancelable(false);
+                    bt.send("open", true);
+
+                    op.setPositiveButton("가계부", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AlertDialog.Builder howMuch = new AlertDialog.Builder(MainActivity.this);
+                            howMuch.setCancelable(false);
+                            howMuch.setTitle("사용한 돈");
+                            howMuch.setMessage("사용한 돈을 입력하세요!");
+
+                            final EditText et = new EditText(MainActivity.this);
+                            howMuch.setView(et);
+
+                            howMuch.setPositiveButton("입력", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bt.send("close", true);
+                                    String strValue = et.getText().toString().trim();
+                                    int iValue = Integer.parseInt(strValue);
+                                    ld.useMoney(iValue);
+
+                                    String canUseMoney = "사용할 수 있는 돈은 " + ld.getMoney() + "만원";
+                                    String usedMoney = "탕진한 돈은 " + ld.getUsedMoney() + "만원";
+                                    canUse.setText(canUseMoney);
+                                    used.setText(usedMoney);
+
+                                    dialog.dismiss();
+                                }
+                            });
+                            howMuch.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bt.send("close", true);
+                                    dialog.dismiss();
+                                }
+                            });
+                            howMuch.show();
+                            dialog.dismiss();
+                        }
+                    });
+                    op.show();
+                } else {
+
+                    AlertDialog.Builder cannot = new AlertDialog.Builder(MainActivity.this);
+                    cannot.setTitle("오류!");
+                    cannot.setMessage("이번 주의 사용 금액을 초과했습니다!");
+
+                    cannot.setNegativeButton("종료", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    cannot.show();
+                }
+
+            }
+        });
     }
 
     @Override

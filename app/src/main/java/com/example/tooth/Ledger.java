@@ -5,8 +5,16 @@ public class Ledger {
     private int used_money = 0;
     private boolean can_use_money = true;
 
+    public boolean canUseMoney() {
+        return can_use_money;
+    }
+
     public int getMoney() {
         return this.current_money;
+    }
+
+    public int getUsedMoney() {
+        return this.used_money;
     }
 
     public void setMoney(int new_val) {
