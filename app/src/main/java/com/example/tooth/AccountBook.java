@@ -4,30 +4,43 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class AccountBook extends AppCompatActivity {
+    private ArrayList<Integer> ints = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
+        ints.add(12);
+        ints.add(36);
+        ints.add(25);
+
         super.onCreate(savedInstance);
         setContentView(R.layout.layout_account_book);
 
         recyclerView = findViewById(R.id.main_list);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        int[] tmp = {13, 20, 45};
-        adapter = new MainAdapter(tmp);
+        adapter = new MainAdapter(ints);
         recyclerView.setAdapter(adapter);
+
+        setup();
     }
 
     @Override
@@ -53,5 +66,19 @@ public class AccountBook extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    public void setup() {
+        Button addSpendLog = findViewById(R.id.addFinish);
+        addSpendLog.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                EditText spendMoney = findViewById(R.id.inputUsedMoney);
+                int tmp_val = Integer.parseInt(spendMoney.getText().toString().trim());
+                ints.add(0, tmp_val);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
     }
 }

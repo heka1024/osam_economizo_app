@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:minHeight="80dp"
+    android:padding="5dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/round"
+    android:layout_height="80dp">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="75"
+        android:orientation="vertical">
 
-    android:background="@drawable/border"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginRight="10dp">
-
-    <TextView
-        android:id="@+id/recycleItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:paddingLeft="20dp"
-        android:text="Data" />
-
-
-</RelativeLayout>
+        <TextView
+            android:id="@+id/usedMoney"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="사용한 돈"
+            android:layout_weight="70"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#33aabb"
+            />
+        <TextView
+            android:id="@+id/textDate"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="날짜"
+            android:layout_weight="40"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            />
+    </LinearLayout>
+</LinearLayout>

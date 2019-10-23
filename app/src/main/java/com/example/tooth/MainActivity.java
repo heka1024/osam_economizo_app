@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 ad.setMessage("이번 주에 사용할 금액을 입력하세요!");
 
                 final EditText et = new EditText(MainActivity.this);
+                et.setRawInputType(InputType.TYPE_CLASS_NUMBER);
                 ad.setView(et);
 
                 ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
