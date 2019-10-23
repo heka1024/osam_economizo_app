@@ -2,11 +2,15 @@ package com.example.tooth;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -15,8 +19,9 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Calendar;
 
+public class MainActivity extends AppCompatActivity {
     private BluetoothSPP bt;
 
     @Override
@@ -67,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
     }
 
     public void onDestroy() {
@@ -89,12 +98,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setup() {
+        final Calendar time = Calendar.getInstance();
+        final TextView curTime = findViewById(R.id.dateNow) ;
+        String itext = (time.get(Calendar.MONTH) + 1) + "월의 " + time.get(Calendar.WEEK_OF_MONTH) + "번째 주";
+        curTime.setText(itext);
+
+
+        final EditText editText1 = (EditText) findViewById(R.id.editText1) ;
         Button btnSend = findViewById(R.id.btnSend); //데이터 전송
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                bt.send("Text", true);
+                String strText = editText1.getText().toString() ;
+                bt.send(strText, true);
             }
         });
+
+        Button curMoney = findViewById(R.id.reviseMoney);
+        curMoney.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
+                ad.setTitle("이번 주에 사용할 돈");
+                ad.setMessage("이번 주에 사용할 금액을 입력하세요!");
+
+                final EditText et = new EditText(MainActivity.this);
+                ad.setView(et);
+
+                ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strValue = et.getText().toString().trim();
+                        int iValue = Integer.parseInt(strValue);
+                        TextView canUse = findViewById(R.id.canUse);
+                        String canUseMoney = "사용할 수 있는 돈은 " + iValue + "만원";
+                        canUse.setText(canUseMoney);
+
+                        dialog.dismiss();
+                    }
+                });
+
+                ad.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                ad.show();
+            }
+        });
+
     }
 
     @Override
