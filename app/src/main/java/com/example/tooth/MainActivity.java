@@ -7,6 +7,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -132,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         ld.setMoney(iValue);
                         String canUseMoney = "사용할 수 있는 돈은 " + ld.getMoney() + "만원";
                         canUse.setText(canUseMoney);
+                        bt.send(Integer.toString(ld.getMoney()), true);
 
                         dialog.dismiss();
                     }
@@ -181,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
                                     canUse.setText(canUseMoney);
                                     used.setText(usedMoney);
 
+                                    bt.send(Integer.toString(ld.getMoney()), true);
+
                                     dialog.dismiss();
                                 }
                             });
@@ -213,6 +219,31 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.homeMenu:
+                intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.accountBook:
+                intent = new Intent(MainActivity.this, AccountBook.class);
+                startActivity(intent);
+                finish();
+                break;
+        }
+        return true;
     }
 
     @Override
