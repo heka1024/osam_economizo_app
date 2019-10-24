@@ -49,7 +49,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int index) {
         DecimalFormat formatter = new DecimalFormat("###,###");
-        String money_string = formatter.format(this.moneys.get(index) * 1000) + "원";
+        String money_string = formatter.format(this.moneys.get(index))  + "원";
         myViewHolder.moneyView.setText(money_string);
 
         Calendar c = Calendar.getInstance();

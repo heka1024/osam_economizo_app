@@ -27,9 +27,9 @@ public class AccountBook extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstance) {
-        ints.add(12);
-        ints.add(36);
-        ints.add(25);
+        ints.add(12000);
+        ints.add(36000);
+        ints.add(25000);
 
         super.onCreate(savedInstance);
         setContentView(R.layout.layout_account_book);

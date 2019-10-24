@@ -16,19 +16,24 @@
             android:layout_width="0dp"
             android:layout_weight=".70"
             android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
             android:hint="  사용 금액"/>
 
         <Button
             android:id="@+id/addFinish"
-            android:text="메모작성"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/round"
+            android:text="입력"
             android:layout_width="0dp"
-            android:layout_weight=".30"
-            android:layout_height="50dp" />
+            android:layout_weight=".25"
+            android:layout_marginRight="5dp"
+            android:layout_height="45dp" />
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_list"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

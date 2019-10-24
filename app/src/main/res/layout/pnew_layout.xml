@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:columnCount="2"
+    >
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_margin="10dp"
+        android:layout_height="50dp"
+        android:text="7월 2번째 주"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:background="@drawable/round"
+        android:layout_gravity="fill_horizontal"
+        android:layout_columnSpan="2"/>
+
+    <LinearLayout
+        android:id="@+id/currentMoneyBox"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="15dp"
+        android:layout_margin="5dp"
+        android:layout_columnWeight="1"
+        android:background="@drawable/ghost_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/currentMoneyButton"
+            android:background="@drawable/ghost_button_seamless"
+            android:layout_height="0dp"
+            android:layout_weight="150"
+            android:layout_width="match_parent"
+            android:drawableTop="@drawable/money"
+            android:text="잔액"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#33aabb"
+            android:stateListAnimator="@null" />
+        <TextView
+            android:id="@+id/currentMoneyNotice"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="44,000원"
+            android:layout_weight="30"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/spentMoneyBox"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="15dp"
+        android:layout_margin="5dp"
+        android:layout_columnWeight="1"
+        android:background="@drawable/ghost_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/spentMoneyButton"
+            android:background="@drawable/ghost_button_seamless"
+            android:layout_height="0dp"
+            android:layout_weight="150"
+            android:layout_width="match_parent"
+            android:drawableTop="@drawable/spent_money"
+            android:text="사용한 돈"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#33aabb"
+            android:stateListAnimator="@null" />
+        <TextView
+            android:id="@+id/spentMoneyNotice"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="37,000원"
+            android:layout_weight="30"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/setMoney"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="20dp"
+        android:background="@drawable/ghost_button"
+        android:layout_margin="5dp"
+        android:layout_columnWeight="1"
+        android:drawableTop="@drawable/setting"
+        android:stateListAnimator="@null"
+        android:textSize="16sp"
+        android:textColor="#626262"
+        android:text="잔액 설정"/>
+
+    <Button
+        android:id="@+id/goToAccountBook"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="20dp"
+        android:background="@drawable/ghost_button"
+        android:layout_margin="5dp"
+        android:layout_columnWeight="1"
+        android:drawableTop="@drawable/account_book"
+        android:stateListAnimator="@null"
+        android:textSize="16sp"
+        android:textColor="#626262"
+        android:text="가계부 열기"/>
+
+    <Button
+        android:id="@+id/bluetoothConnect"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:background="@drawable/ghost_button"
+        android:layout_margin="5dp"
+        android:layout_columnWeight="1"
+        android:drawableTop="@drawable/bluetooth"
+        android:text="블루투스 연결"
+        android:textSize="16sp"
+        android:textColor="#626262"
+        android:stateListAnimator="@null"
+        android:layout_columnSpan="2"/>
+</GridLayout>

@@ -21,8 +21,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-import android.os.Bundle;
-
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.pnew_layout);
         ld = new Ledger();
         bt = new BluetoothSPP(this); //Initializing
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnConnect = findViewById(R.id.btnConnect); //연결시도
+        Button btnConnect = findViewById(R.id.bluetoothConnect); //연결시도
         btnConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
@@ -99,14 +98,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setup() {
+    public void setTime() {
         final Calendar time = Calendar.getInstance();
-        final TextView curTime = findViewById(R.id.dateNow) ;
-        String itext = (time.get(Calendar.MONTH) + 1) + "월의 " + time.get(Calendar.WEEK_OF_MONTH) + "번째 주";
-        curTime.setText(itext);
-        final TextView canUse = findViewById(R.id.canUse);
-        final TextView used = findViewById(R.id.used);
+        final TextView curTime = findViewById(R.id.header) ;
+        String iText = (time.get(Calendar.MONTH) + 1) + "월 " + time.get(Calendar.WEEK_OF_MONTH) + "번째 주";
+        curTime.setText(iText);
+    }
 
+    public void setup() {
+        setTime();
+
+        // set go to account bank
+        Button goToAccountBook = findViewById(R.id.goToAccountBook);
+        goToAccountBook.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent accountBook = new Intent(MainActivity.this, AccountBook.class);
+                startActivity(accountBook);
+            }
+        });
+
+
+
+        /*
 
         final EditText editText1 = findViewById(R.id.editText1) ;
         Button btnSend = findViewById(R.id.btnSend); //데이터 전송
@@ -116,10 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 String strText = editText1.getText().toString() ;
                 bt.send(strText, true);
             }
-        });
+        }); */
 
-        Button curMoney = findViewById(R.id.reviseMoney);
-        curMoney.setOnClickListener(new View.OnClickListener() {
+        final TextView curMoney = findViewById(R.id.currentMoneyNotice);
+        Button setMoney= findViewById(R.id.setMoney);
+        setMoney.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 AlertDialog.Builder ad = new AlertDialog.Builder(MainActivity.this);
                 ad.setTitle("이번 주에 사용할 돈");
@@ -135,8 +149,12 @@ public class MainActivity extends AppCompatActivity {
                         String strValue = et.getText().toString().trim();
                         int iValue = Integer.parseInt(strValue);
                         ld.setMoney(iValue);
-                        String canUseMoney = "사용할 수 있는 돈은 " + ld.getMoney() + "만원";
-                        canUse.setText(canUseMoney);
+                        DecimalFormat formatter = new DecimalFormat("###,###");
+                        String money_string = formatter.format(ld.getMoney())  + "원";
+
+                        curMoney.setText(money_string);
+
+                        // send bluetooth message such as "76200"
                         bt.send(Integer.toString(ld.getMoney()), true);
 
                         dialog.dismiss();
@@ -152,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 ad.show();
             }
         });
+        /*
 
         Button useMoney = findViewById(R.id.open);
         useMoney.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+         */
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
