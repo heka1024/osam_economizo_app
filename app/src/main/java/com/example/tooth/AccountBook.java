@@ -20,16 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class AccountBook extends AppCompatActivity {
-    private ArrayList<Integer> ints = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
+    SingletonInts ints;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
-        ints.add(12000);
-        ints.add(36000);
-        ints.add(25000);
+        ints = ints.getInts();
 
         super.onCreate(savedInstance);
         setContentView(R.layout.layout_account_book);
@@ -37,7 +35,7 @@ public class AccountBook extends AppCompatActivity {
         recyclerView = findViewById(R.id.main_list);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MainAdapter(ints);
+        adapter = new MainAdapter();
         recyclerView.setAdapter(adapter);
 
         setup();
@@ -72,10 +70,20 @@ public class AccountBook extends AppCompatActivity {
         Button addSpendLog = findViewById(R.id.addFinish);
         addSpendLog.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText spendMoney = findViewById(R.id.inputUsedMoney);
-                int tmp_val = Integer.parseInt(spendMoney.getText().toString().trim());
-                ints.add(0, tmp_val);
-                adapter.notifyDataSetChanged();
+                try {
+                    EditText spendMoney = findViewById(R.id.inputUsedMoney);
+                    String send_string = spendMoney.getText().toString().trim();
+                    ((MainActivity)MainActivity.mainContext).bt.send(send_string, true);
+
+                    int tmp_val = Integer.parseInt(send_string);
+                    ints.add(tmp_val);
+                    ((MainActivity)MainActivity.mainContext).useCurrentMoney(tmp_val);
+                    adapter.notifyDataSetChanged();
+                } catch (NullPointerException e) {
+                    Log.e("AccountBook", "failed to add in list");
+                    finish();
+                }
+
             }
         });
 

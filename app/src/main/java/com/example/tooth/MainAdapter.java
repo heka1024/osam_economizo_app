@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
-    private ArrayList<Integer> moneys = new ArrayList<>();
+    private ArrayList<Integer> moneys;
+    SingletonInts ints;
 
-    public MainAdapter(ArrayList<Integer> u) {
-        this.moneys = u;
+    public MainAdapter() {
+        ints = ints.getInts();
+        this.moneys = ints.getElem();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +62,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-        return moneys.size();
+        int size = 0;
+        try {
+            size = moneys.size();
+        } catch (NullPointerException e) {
+            size = 0;
+        }
+        return size;
     }
 
 }

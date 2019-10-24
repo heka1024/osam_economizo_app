@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,18 +24,23 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    private BluetoothSPP bt;
-    private Ledger ld;
+    public static Context mainContext;
+    public BluetoothSPP bt;
+    public Ledger ld;
+    public SingletonInts singletonInts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pnew_layout);
+        mainContext = this;
         ld = new Ledger();
         bt = new BluetoothSPP(this); //Initializing
+        singletonInts = singletonInts.getInts();
 
         if (!bt.isBluetoothAvailable()) { //블루투스 사용 불가
             Toast.makeText(getApplicationContext()
@@ -98,6 +105,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // wrapper method to revise current money, and automatically send bluetooth signal
+    public void setCurrentMoney(int val) {
+        ld.setMoney(val);
+        TextView curMoney = findViewById(R.id.currentMoneyNotice);
+
+        DecimalFormat formatter = new DecimalFormat("###,###");
+        String money_string = formatter.format(ld.getMoney())  + "원";
+
+        bt.send(Integer.toString(ld.getMoney()), true);
+
+        curMoney.setText(money_string);
+    }
+
+    public void useCurrentMoney(int use_val) {
+        ld.useMoney(use_val);
+        TextView curMoney = findViewById(R.id.currentMoneyNotice);
+        TextView spentMoney = findViewById(R.id.spentMoneyNotice);
+
+        DecimalFormat formatter = new DecimalFormat("###,###");
+        String current_money_string = formatter.format(ld.getMoney())  + "원";
+        String spent_money_string = formatter.format(ld.getUsedMoney())  + "원";
+
+        bt.send(Integer.toString(ld.getMoney()), true);
+
+        curMoney.setText(current_money_string);
+        spentMoney.setText(spent_money_string);
+
+    }
+
     public void setTime() {
         final Calendar time = Calendar.getInstance();
         final TextView curTime = findViewById(R.id.header) ;
@@ -131,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }); */
 
-        final TextView curMoney = findViewById(R.id.currentMoneyNotice);
         Button setMoney= findViewById(R.id.setMoney);
         setMoney.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -148,14 +183,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String strValue = et.getText().toString().trim();
                         int iValue = Integer.parseInt(strValue);
-                        ld.setMoney(iValue);
-                        DecimalFormat formatter = new DecimalFormat("###,###");
-                        String money_string = formatter.format(ld.getMoney())  + "원";
+                        setCurrentMoney(iValue);
 
-                        curMoney.setText(money_string);
-
-                        // send bluetooth message such as "76200"
-                        bt.send(Integer.toString(ld.getMoney()), true);
+                        TextView spentMoney = findViewById(R.id.spentMoneyNotice);
+                        spentMoney.setText("0원");
 
                         dialog.dismiss();
                     }
