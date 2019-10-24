@@ -1,9 +1,25 @@
 package com.example.tooth;
 
 public class Ledger {
-    private int current_money = 0;
-    private int used_money = 0;
-    private boolean can_use_money = true;
+    private static Ledger ledger = null;
+    private int current_money;
+    private int used_money;
+    private boolean can_use_money;
+
+    private Ledger() {
+        this.current_money = 0;
+        this.used_money = 0;
+        this.can_use_money = false;
+    }
+
+    public static Ledger getLedger() {
+        if (ledger == null) {
+            ledger = new Ledger();
+            return ledger;
+        } else {
+            return ledger;
+        }
+    }
 
     public boolean canUseMoney() {
         return can_use_money;

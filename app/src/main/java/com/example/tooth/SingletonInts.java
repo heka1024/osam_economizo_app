@@ -19,7 +19,7 @@ public class SingletonInts {
 
     public void add(int elem) {
         try {
-            ints.add(elem);
+            ints.add(0, elem);
         } catch (NullPointerException e) {
             ints = new ArrayList<>();
             ints.add(elem);

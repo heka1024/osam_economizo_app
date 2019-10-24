@@ -3,12 +3,10 @@ package com.example.tooth;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.View.OnClickListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

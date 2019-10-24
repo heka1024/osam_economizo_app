@@ -1,7 +1,5 @@
 package com.example.tooth;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,16 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-
 public class AccountBook extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
     SingletonInts ints;
+    Ledger ld;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
+        ld = ld.getLedger();
         ints = ints.getInts();
 
         super.onCreate(savedInstance);
@@ -70,20 +68,25 @@ public class AccountBook extends AppCompatActivity {
         Button addSpendLog = findViewById(R.id.addFinish);
         addSpendLog.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                try {
                     EditText spendMoney = findViewById(R.id.inputUsedMoney);
                     String send_string = spendMoney.getText().toString().trim();
-                    ((MainActivity)MainActivity.mainContext).bt.send(send_string, true);
 
                     int tmp_val = Integer.parseInt(send_string);
-                    ints.add(tmp_val);
-                    ((MainActivity)MainActivity.mainContext).useCurrentMoney(tmp_val);
-                    adapter.notifyDataSetChanged();
-                } catch (NullPointerException e) {
-                    Log.e("AccountBook", "failed to add in list");
-                    finish();
-                }
 
+                    if (ld.getMoney() - tmp_val >= 0) {
+                        try {
+                            ints.add(tmp_val);
+                            ((MainActivity)MainActivity.mainContext).useCurrentMoney(tmp_val);
+                            adapter.notifyDataSetChanged();
+                        } catch (NullPointerException e) {
+                            Log.e("AccountBook", "failed to add in list");
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "잔고보다 많은 지출입니다!",
+                                Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
